@@ -1,0 +1,76 @@
+{% extends 'users/base.html' %}
+{% load static crispy_forms_tags %}
+{% block title %} Transactions | {{site.name}} {% endblock%}
+
+{% block content %}
+
+<!-- <input type="tel" id="phone" name="phone"> -->
+<div class="container">
+    <div class="title-container">
+      <h1 class='subtitle2'>Transactions</h1>
+    </div>
+  <div>
+    <table class="table">
+      <thead thead-dark>
+        <tr>
+          <th scope="col">Transaction ID</th>
+          <th scope="col">Type</th>
+          <th scope="col">Status</th>
+          <th scope="col">Mode</th>
+          <th scope="col">Time</th>
+          <th scope="col">Amount($)</th>
+        </tr>
+      </thead>
+      <tbody id="infinite-container">
+        {% for transaction in page_obj %}
+        <tr>
+          <td>{{transaction.transaction_id}}</td>
+          <td>{{transaction.trans_type}}</td>
+          <td>{{transaction.status}}</td>
+          <td>{{transaction.mode}}</td>
+          <td>{{transaction.time}}</td>
+          <td class="transaction-amount bold {% if transaction.trans_type == 'DB' or transaction.trans_type == 'DEBIT' %}red-text {%else%}green-text{% endif%} ">{% if transaction.trans_type == 'DB' or transaction.trans_type == 'DEBIT' %}-{% endif%}${{transaction.amount |floatformat:2}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+  </table>
+<div class="loading" style="display: none;">
+    Loading...
+  </div>
+  </div>
+  <div class="clearfix"></div>
+  <ul class="pagination">
+         {% if page_obj.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+          {% endif %}
+        <li class = "page-item active">
+          <span class="page-link">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+        </li>
+
+          {% if page_obj.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a></li>
+              <li class = "page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+          {% endif %}
+        </ul>
+</div>
+<div class="mb7"></div>
+ 
+  {% endblock %}
+
+  {% block extrajs %}
+<script src="{% static 'tutor/noframework.waypoints.min.js' %}" charset="utf-8"></script>
+
+  <script>
+    var infinite = new Waypoint.infinite({
+      element: document.getElementById('infinite-container'),
+      handler: function(direction) {
+        M.toast({html:this.element.id + ' triggers at ' + this.triggerPoint})
+      },
+      offset: '75%'
+    });
+  </script>
+  {% endblock %}

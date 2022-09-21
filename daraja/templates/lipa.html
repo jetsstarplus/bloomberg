@@ -1,0 +1,58 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} Lipa Na Mpesa | {{site.name}} {% endblock%}
+
+{% block content %}
+
+{% block cssblock %}
+<link href="{% static 'home/js/builds/css/intlTelInput.css' %}" rel="stylesheet">
+<link href="{% static 'home/js/builds/css/demo.css' %}" rel="stylesheet">
+<link href="{% static 'home/js/builds/isValidNumber.css' %}" rel = "stylesheet">
+<script src="{% static 'home/js/builds/js/utils.js' %}"></script>
+
+{% endblock %}
+<!-- <input type="tel" id="phone" name="phone"> -->
+<div class="container row relative" style="height:80vh">
+  <div class="center-container ">
+    <div class="ajax-form">
+        <div id="sendmessage"></div>
+        <div id="errormessage"></div>
+    </div>
+    <form id="ajax-form" class="adminpro-form" action='{% url "payments:lipa_na_mpesa" product.id %}' novalidate="novalidate" method='POST' enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="subtitle-container">
+        <h5 class='intext-bg'>Lipa Na Mpesa</h5>
+      </div>
+        <div class="form-group">
+            <label for="phone">Enter Your Phone Number</label>
+            <div class="login-input-area">
+                <input class="form-input form-control" type="tel" id="phone" name="phone"  >
+            </div>
+            <div id="valid-msg" class="hide">✓ Valid</div>
+            <div id="error-msg" class="hide"></div>
+        </div>
+
+        {% comment %} <div class="form-group">
+          <div>
+            <label for="amount">Enter The Amount</label>
+          </div>
+          <input type="number" class="form-control" id='amount' name="amount" value="">
+        </div> {% endcomment %}
+      <div class="form-group">
+        <button type="submit" id = "confirmBtn" class="btn indigo darken-3 indigo-button disabled">Initiate Payment</button>
+      <div class="form-group">
+
+    </form>
+  </div>
+</div>
+<div class="mb7"></div>
+
+<!-- The phone number field -->
+
+<script> let intlUtils = "{% static 'home/js/builds/js/utils.js' %}"
+    </script>
+  <script src="{% static 'home/js/builds/js/intlTelInput.min.js' %}"></script>
+
+  <script src="{% static 'home/contactform/phone.js' %}"></script>
+  {% endblock %}

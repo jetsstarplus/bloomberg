@@ -1,0 +1,20 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h2>Pay</h2>
+    <div class="row">
+      {% for prod in product %}
+      <div class="col-md-4">
+        <div class="container" style="border:solid; background-color: lightyellow; margin-right: 10px;">
+          <h2>{{prod.title}}</h2>
+          <p>
+            {{prod.description}}
+          </p>
+          <h5>{{prod.price}}</h5>
+          <a class="btn btn-primary btn-lg btn-block" href="{% url 'checkout' prod.id  %}">Buy</a>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+{% endblock content %}

@@ -1,0 +1,36 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+        <div class="media-body">
+          <h2 class="account-heading">{{ user.username }}</h2>
+          <p class="text-secondary">{{ user.email }}</p>
+          <p class="text-secondary">Total File Size: {{ total_file_size|filesizeformat }} </p>
+          {% if plan %}
+          <p class="text-secondary"><strong>Plan: {{ plan.product }}</strong></p>
+          <p class="text-secondary"><strong>Price: </strong>${{plan.price}}</p>
+          <p class="text-secondary"><strong>Size: </strong>{{ plan.storage_size }} GB</p>
+          <p class="text-secondary"><strong>Expires: </strong>{{plan.date_expired.date}}</p>
+          {% else %}
+          <p class="text-secondary"><strong>Plan: Free Plan</strong></p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        {% for vid in videos %}
+        <div class="col-sm-4" style="border: solid; margin: 20px;">
+          <h5>{{ vid.name }}</h5>
+          <video width="100%" height="480" controls id="cspd_video" controlsList="nodownload">
+
+            <source src="{{ vid.video.url }}" type="video/mp4">
+          </video>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+{% endblock content %}

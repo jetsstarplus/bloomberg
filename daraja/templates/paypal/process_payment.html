@@ -1,0 +1,14 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% load materializecss %}
+{% block title %} Process Payment | {{site.name}} {% endblock%}
+
+{% block content %}
+<div class="container centered">
+  <h4>Pay with PayPal</h4>
+  <div class="w-full centered my4">
+    {{ form.render }}
+  </div>
+</div>
+<div class="mb7"></div>
+  {% endblock %}

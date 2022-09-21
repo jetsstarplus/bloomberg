@@ -1,0 +1,51 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} Paybill - Lipa Na Mpesa | {{site.name}} {% endblock%}
+
+{% block content %}
+<!-- <input type="tel" id="phone" name="phone"> -->
+<div class="container">
+    <div class="row">
+        <form id="ajax-form" class="form-group" action="{% url 'payments:paybill' product.id %}" novalidate="novalidate" method='POST' enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+              <div class="title-container">
+                  <h1 class='subtitle'>Lipa Na Mpesa Paybill</h1>
+                  <div class="divider">
+                  </div>
+              </div>
+              <table class = "table">
+                <tbody>
+                  <tr><td><strong style="color:blue;">1.  </strong>Select <strong>"Pay bill"</strong> from your Safaricom MPesa Menu.</td></tr>
+                  <tr><td><strong style="color:blue;">2.  </strong>Select <strong>"Enter Business Number"</strong>.</td></tr>
+                  <tr><td><strong style="color:blue;">3.  </strong>Enter Business Number: <strong style="color:red">{{paybill}}</strong>.</td></tr>
+                  <tr><td><strong style="color:blue;">4.  </strong>Select <strong>"Enter Account Number"</strong>.</td></tr>
+                  <tr><td><strong style="color:blue;">5.  </strong>Enter Account Number as: <strong style="color:red">{{account}}</strong>.</td></tr>
+                  <tr><td><strong style="color:blue;">6.  </strong>Enter Amount - <strong style="color:red">Ksh: {{amount}}</strong>.</td></tr>
+                  <tr><td><strong style="color:blue;">7.  </strong>Press <strong>"OK"</strong> Only when you are sure of all the details You entered.</td></tr>
+                  <tr class='centered'><td> <strong style="color:#ff4933; text-transform:uppercase; text-align:center">Enter the transaction ID below:</strong></td></tr>
+                </tbody>
+              </table>
+              <div>
+                  <div class="ajax-form">
+                      <div id="sendmessage"></div>
+                      <div id="errormessage"></div>
+                  </div>
+              </div>
+              <div>
+                <p class="boldest">Transaction ID:</p>
+                <div class="input-group" style="margin-bottom: 1rem">
+                    <input class='form-control' type="text" id="trans" name="trans">
+                </div>
+                <div class="input-group">
+                  <button type="submit" id = 'confirmBtn' class="btn btn-primary btn-block">Confirm Payment</button>
+                </div>
+              </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="mb7"></div>
+
+  {% endblock %}
