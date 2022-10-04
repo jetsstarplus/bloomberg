@@ -40,19 +40,16 @@ def lipa_mpesa(request, prod):
         # messages.add_message(request, messages.INFO, f"Hello {username}")
         phone_number=phone_number.strip()
         phone = len(phone_number)
-        # a list of options that are accepted for mobile numbers
         options = {
             10: phone_number[1:phone],
             12: phone_number[3:phone],
             13: phone_number[4:phone],
             9: phone_number,
         }
-        # looping throught the options and assigning the right action to them
-        for counter, index in enumerate(options):
-            if phone == index:
-                phone_number= options[index]
-                state= True
-    #  If the state is true then we proceed to send the request
+        if phone in options.keys:
+            phone_number = options[phone]
+            state= True
+
         if state:
             try:
                 phone_number=int('254'+phone_number)
@@ -61,14 +58,14 @@ def lipa_mpesa(request, prod):
                 messages.add_message(request, messages.WARNING,  error)
             try:
                 result = lipa_na_mpesa(phone_number, amount, order.order_no, 'Payment')
-                # print(result.text)
+                r_json = result.json()
+                message = " You can now enter the pin in your phone to finish the payment!"
+                merchant= r_json['MerchantRequestID']
+                code=r_json['ResponseCode']
+                description= r_json['ResponseDescription']
+                checkout= r_json['CheckoutRequestID']
+                error = description;
                 if result.status_code ==200:
-                    r_json = result.json()
-                    message = " You can now enter the pin in your phone to finish the payment!"
-                    merchant= r_json['MerchantRequestID']
-                    code=r_json['ResponseCode']
-                    description= r_json['ResponseDescription']
-                    checkout= r_json['CheckoutRequestID']
                     
                     """Storing the started transaction for future confirmation with the checkout and merchant Id"""
                     initiated = Initiate(
@@ -82,26 +79,12 @@ def lipa_mpesa(request, prod):
                     initiated.save()
                     # print(initiated.user)
                     # print(r_json)
-                    data = {
-                    'message':message,
-                    'status':200,
-                }
+                    data = {'message':message, 'status':200, }
                 else:
-                    if error:
-                        error=error
-                    else:
-                        error="Transaction Initiation Failed!"
-                    print(error)
-                    data = {
-                        'message':error,
-                        'status':200,
-                    }
+                    data = {'message':error, 'status':200, }
             except:
                 message="There Was A Connection Error!"
-                data = {
-                    'message':message,
-                    'status':500,
-                }
+                data = {'message':message,'status':500,}
 
             return JsonResponse(data)
 
@@ -260,5 +243,5 @@ class PayByCheque(View):
         user= request.user
         product = Product.objects.get(pk=prod)
         order = get_create_order(product, user,1)               
-        get_create_plan(order, user, product, PaymentModeChoices.CHEQUE)
+        get_create_plan(order, user, product, PaymentModeChoices.CHEQUE, order.order_no)
         return redirect('payments:transactions')    

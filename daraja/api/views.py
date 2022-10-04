@@ -75,8 +75,8 @@ class Lipa_List(CreateAPIView):
         return Response({'ResultDescription': result_description})
 
 
-class Customer_to_Business_Validate(RetrieveAPIView):
-    def retrieve(self, request):
+class Customer_to_Business_Validate(CreateAPIView):
+    def create(self, request):
         print(request.data, " This is the request")
         BillRefNumber=request.data["BillRefNumber"]
         Amount =Decimal(request.data["TransAmount"])
